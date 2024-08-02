@@ -72,7 +72,7 @@ export default function Login() {
          "localhost:27017",
           JSON.stringify(data.user)
         );
-        navigate("/chat");
+        navigate("/");
       }
     }
   };
