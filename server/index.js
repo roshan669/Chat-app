@@ -12,7 +12,7 @@ require("dotenv").config();
 const server = http.createServer(app);
 
 var corsOptions = {
-  origin: 'https://chat-app-91lq.onrender.com/',
+  origin: 'https://chat-app-91lq.onrender.com',
   optionsSuccessStatus: 200 
 };
 
@@ -35,7 +35,7 @@ server.listen(PORT, () => {
 
 const io = socketIo(server, {
   cors: {
-    origin: "https://chat-app-91lq.onrender.com/",
+    origin: "https://chat-app-91lq.onrender.com",
     credentials: true,
   }
 });
