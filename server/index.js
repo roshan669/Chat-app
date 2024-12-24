@@ -11,12 +11,12 @@ require("dotenv").config();
 
 const server = http.createServer(app);
 
-var corsOptions = {
-  origin: 'https://chat-app-91lq.onrender.com',
-  optionsSuccessStatus: 200 
-};
+// var corsOptions = {
+//   origin: 'https://chat-app-91lq.onrender.com',
+//   optionsSuccessStatus: 200 
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use("/api/auth", userRoutes);
 app.use("/api/messages", messageRoutes);
