@@ -33,7 +33,12 @@ server.listen(PORT, () => {
   console.log(`Server Started at PORT ${PORT}`);
 });
 
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    credentials: true,
+  }
+});
 
 global.onlineUsers = new Map(); 
 
