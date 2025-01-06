@@ -37,7 +37,7 @@ const io = socketIo(server, {
   cors: {
     origin: "*",
     credentials: true,
-  }
+  }, transports: ['websocket'],
 });
 
 global.onlineUsers = new Map(); 
