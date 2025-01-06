@@ -33,12 +33,7 @@ server.listen(PORT, () => {
   console.log(`Server Started at PORT ${PORT}`);
 });
 
-const io = socketIo(server, {
-  cors: {
-    origin: "https://chat-app-91lq.onrender.com",
-    credentials: true,
-  }
-});
+const io = socketIo(server);
 
 global.onlineUsers = new Map(); 
 
