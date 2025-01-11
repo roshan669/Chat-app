@@ -1,7 +1,7 @@
 const Messages = require("../model/messageModel");
 
 module.exports.getMessages = async (req, res, next) => {
-try {
+  try {
     const { from, to, limit = 15, before } = req.body;
 
     const query = {
@@ -12,11 +12,11 @@ try {
       query.updatedAt = { $lt: new Date(before) }; // Filter messages before the specified timestamp
     }
 
-    const messages = await Message.find(query)
-      .sort({ updatedAt: -1 }) // Sort by descending updatedAt
-      .limit(limit); // Limit the number of messages
+    const messages = await Messages.find(query)
+      .sort({ updatedAt: -1 }) // Sort by descending updatedAt (latest first)
+      .limit(limit); 
 
-     const projectedMessages = messages.map((msg) => ({
+    const projectedMessages = messages.map((msg) => ({
       id: msg._id.toString(),
       fromSelf: msg.sender.toString() === from,
       message: msg.message.text,
