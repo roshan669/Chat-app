@@ -2,7 +2,7 @@ const Messages = require("../model/messageModel");
 
 module.exports.getMessages = async (req, res, next) => {
 try {
-    const { from, to, limit = 10, before } = req.body;
+    const { from, to, limit = 15, before } = req.body;
 
     const query = {
       users: { $all: [from, to] },
@@ -16,7 +16,13 @@ try {
       .sort({ updatedAt: -1 }) // Sort by descending updatedAt
       .limit(limit); // Limit the number of messages
 
-    res.json(messages);
+     const projectedMessages = messages.map((msg) => ({
+      id: msg._id.toString(),
+      fromSelf: msg.sender.toString() === from,
+      message: msg.message.text,
+    }));
+
+    res.json(projectedMessages);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch messages' });
