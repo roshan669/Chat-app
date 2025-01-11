@@ -20,6 +20,7 @@ module.exports.getMessages = async (req, res, next) => {
       id: msg._id.toString(),
       fromSelf: msg.sender.toString() === from,
       message: msg.message.text,
+      timestamp:msg.updatedAt.toString()
     }));
 
     res.json(projectedMessages);
