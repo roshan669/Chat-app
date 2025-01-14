@@ -7,6 +7,6 @@ const router = require("express").Router();
 
 router.post("/addmsg/", addMessage);
 router.post("/getmsg/", getMessages);
-router.post("/getnewmsg", getNewMessages);
+router.post("/getnewmsg", getNewMessage);
 
 module.exports = router;
