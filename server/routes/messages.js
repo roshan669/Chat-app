@@ -1,7 +1,7 @@
 const {
   addMessage,
   getMessages,
-  logout,
+  getNewMessage,
 } = require("../controllers/messageController");
 const router = require("express").Router();
 
