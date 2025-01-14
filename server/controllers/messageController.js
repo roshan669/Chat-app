@@ -48,15 +48,15 @@ module.exports.addMessage = async (req, res, next) => {
 
 module.exports.getNewMessage = async (req, res, next) => {
   try {
-    const { from, to } = req.body;
+    const { to } = req.body;
 
     const query = {
-      users: { $all: [from, to] },
+      users: { $all: [to] },
     };
 
     const lastMessage = await Messages.findOne(
       {
-        users: { $all: [to, from] }, // Ensure both users are involved
+        users: { $all: [to] }, // Ensure both users are involved
         sender: to, // Filter for messages sent by 'to'
       },
       { sort: { updatedAt: -1 } }
