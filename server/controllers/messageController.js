@@ -14,19 +14,19 @@ module.exports.getMessages = async (req, res, next) => {
 
     const messages = await Messages.find(query)
       .sort({ updatedAt: -1 }) // Sort by descending updatedAt (latest first)
-      .limit(limit); 
+      .limit(limit);
 
     const projectedMessages = messages.map((msg) => ({
       id: msg._id.toString(),
       fromSelf: msg.sender.toString() === from,
       message: msg.message.text,
-      timestamp:msg.updatedAt.toString()
+      timestamp: msg.updatedAt.toString(),
     }));
 
     res.json(projectedMessages);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch messages' });
+    res.status(500).json({ error: "Failed to fetch messages" });
   }
 };
 
@@ -46,3 +46,32 @@ module.exports.addMessage = async (req, res, next) => {
   }
 };
 
+module.exports.getNewMessage = async (req, res, next) => {
+  try {
+    const { from, to, after } = req.body;
+
+    const query = {
+      users: { $all: [from, to] },
+    };
+
+    if (after) {
+      query.updatedAt = { $gt: new Date(after) }; // Filter messages before the specified timestamp
+    }
+
+    const messages = await Messages.find(query)
+      .sort({ updatedAt: -1 }) // Sort by descending updatedAt (latest first)
+      .limit(limit);
+
+    const projectedMessages = messages.map((msg) => ({
+      id: msg._id.toString(),
+      fromSelf: msg.sender.toString() === from,
+      message: msg.message.text,
+      timestamp: msg.updatedAt.toString(),
+    }));
+
+    res.json(projectedMessages);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch messages" });
+  }
+};
