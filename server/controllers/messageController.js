@@ -72,13 +72,10 @@ module.exports.getNewMessage = async (req, res, next) => {
       query.updatedAt = { $gt: new Date(after) }; // Filter messages before the specified timestamp
     }
 
-    const messages = await Messages.find(query)
-      .sort({ updatedAt: -1 }) // Sort by descending updatedAt (latest first)
-      .limit(limit);
+    const messages = await Messages.find(query).sort({ updatedAt: -1 }); // Sort by descending updatedAt (latest first)
 
     const projectedMessages = messages.map((msg) => ({
       id: msg._id.toString(),
-      fromSelf: msg.sender.toString() === from,
       message: msg.message.text,
       timestamp: msg.updatedAt.toString(),
     }));
