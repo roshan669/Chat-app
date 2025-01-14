@@ -48,11 +48,25 @@ module.exports.addMessage = async (req, res, next) => {
 
 module.exports.getNewMessage = async (req, res, next) => {
   try {
-    const { from, to, after } = req.body;
+    const { from, to } = req.body;
 
     const query = {
       users: { $all: [from, to] },
     };
+
+    const lastMessage = await Messages.findOne(
+      {
+        users: { $all: [to, from] }, // Ensure both users are involved
+        sender: to, // Filter for messages sent by 'to'
+      },
+      { sort: { updatedAt: -1 } }
+    ); // Sort by descending updatedAt (latest first)
+
+    // Initialize the 'updatedAt' date based on the last message
+    let after = null;
+    if (lastMessage) {
+      after = lastMessage.updatedAt; // Use the updatedAt of the last message
+    }
 
     if (after) {
       query.updatedAt = { $gt: new Date(after) }; // Filter messages before the specified timestamp
