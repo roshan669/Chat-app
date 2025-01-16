@@ -44,7 +44,6 @@ const io = socketIo(server, {
 });
 
 global.allOnlineUsers = new Map();
-console.log(allOnlineUsers);
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;
@@ -53,6 +52,7 @@ io.on("connection", (socket) => {
     global.allOnlineUsers.set(userId, socket.id);
     socket.data.userId = userId;
     console.log(`User ${userId} connected`);
+    console.log(allOnlineUsers);
   });
 
   socket.on("send-msg", (data) => {
