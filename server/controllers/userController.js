@@ -92,7 +92,7 @@ module.exports.logout = (req, res, next) => {
 
 module.exports.getOnlineUsers = async (req, res, next) => {
   try {
-    const allUserIds = Array.from(global.onlineUsers.keys());
+    const allUserIds = Array.from(global.allOnlineUsers);
 
     // If there are fewer than 10 online users,
     // return all of them without random selection
@@ -109,6 +109,7 @@ module.exports.getOnlineUsers = async (req, res, next) => {
 
     const onlineUsersData = await User.find({
       _id: { $in: randomUserIds },
+      _id: { $ne: req.params.id },
     }).select(["email", "username", "avatarImage", "_id"]);
 
     res.json(onlineUsersData);
@@ -119,6 +120,6 @@ module.exports.getOnlineUsers = async (req, res, next) => {
 
 // Helper function to get random elements from an array
 function getRandomElements(arr, count) {
-  const shuffled = [...arr].sort(() => 0.5 - Math.random()); // Create a shuffled copy of the array
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
