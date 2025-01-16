@@ -44,6 +44,7 @@ const io = socketIo(server, {
 });
 
 global.allOnlineUsers = new Map();
+console.log(allOnlineUsers);
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;

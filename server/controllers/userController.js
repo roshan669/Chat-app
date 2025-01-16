@@ -1,6 +1,12 @@
 const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
 
+// Helper function to get random elements from an array
+function getRandomElements(arr, count) {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -117,9 +123,3 @@ module.exports.getOnlineUsers = async (req, res, next) => {
     next(ex);
   }
 };
-
-// Helper function to get random elements from an array
-function getRandomElements(arr, count) {
-  const shuffled = [...arr].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
-}
