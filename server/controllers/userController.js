@@ -99,6 +99,7 @@ module.exports.getOnlineUsers = async (req, res, next) => {
     if (allUserIds.length <= 10) {
       const onlineUsersData = await User.find({
         _id: { $in: allUserIds },
+        _id: { $ne: req.params.id },
       }).select(["email", "username", "avatarImage", "_id"]);
       return res.json(onlineUsersData);
     }

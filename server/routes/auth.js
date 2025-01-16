@@ -14,6 +14,6 @@ router.post("/login", login);
 router.post("/setAvatar/:id", setAvatar);
 router.get("/allusers/:id", getAllUsers);
 router.get("/logout/:id", logout);
-router.get("/getonlineusers", getOnlineUsers);
+router.get("/getonlineusers/:id", getOnlineUsers);
 
 module.exports = router;
