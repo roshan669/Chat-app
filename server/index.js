@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
   global.chatSocket = socket;
 
   socket.on("add-user", (userId) => {
-    global.onlineUsers.set(userId, socket.id);
+    global.allOnlineUsers.set(userId, socket.id);
     socket.data.userId = userId;
     console.log(`User ${userId} connected`);
   });
