@@ -43,7 +43,7 @@ const io = socketIo(server, {
   transports: ["websocket"],
 });
 
-global.allOnlineUsers = new Set();
+global.allOnlineUsers = new Map();
 
 io.on("connection", (socket) => {
   global.chatSocket = socket;
@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const userId = socket.data.userId;
     if (userId) {
-      global.onlineUsers.delete(userId);
+      global.allOnlineUsers.delete(userId);
       console.log(`User ${userId} disconnected`);
     }
   });

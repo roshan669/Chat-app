@@ -92,7 +92,7 @@ module.exports.logout = (req, res, next) => {
 
 module.exports.getOnlineUsers = async (req, res, next) => {
   try {
-    const allUserIds = Array.from(global.allOnlineUsers);
+    const allUserIds = Array.from(global.allOnlineUsers.keys());
 
     // If there are fewer than 10 online users,
     // return all of them without random selection
