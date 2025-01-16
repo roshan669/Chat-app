@@ -100,12 +100,17 @@ module.exports.getOnlineUsers = async (req, res, next) => {
   try {
     const allUserIds = Array.from(global.allOnlineUsers.keys());
 
+    // If there are no other online users (only the current user)
+    if (allUserIds.length === 1 && allUserIds[0] === req.params.id) {
+      console.log("NO online users");
+      return res.json([]); // Return an empty array of users
+    }
+
     // If there are fewer than 10 online users,
     // return all of them without random selection
     if (allUserIds.length <= 10) {
       const onlineUsersData = await User.find({
-        _id: { $in: allUserIds },
-        _id: { $ne: req.params.id },
+        _id: { $in: allUserIds, $ne: req.params.id },
       }).select(["email", "username", "avatarImage", "_id"]);
       return res.json(onlineUsersData);
     }
@@ -114,8 +119,7 @@ module.exports.getOnlineUsers = async (req, res, next) => {
     const randomUserIds = getRandomElements(allUserIds, 10);
 
     const onlineUsersData = await User.find({
-      _id: { $in: randomUserIds },
-      _id: { $ne: req.params.id },
+      _id: { $in: allUserIds, $ne: req.params.id },
     }).select(["email", "username", "avatarImage", "_id"]);
 
     res.json(onlineUsersData);
