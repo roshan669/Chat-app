@@ -59,6 +59,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("offline", () => {
+    console.log("offline event called");
     const userId = socket.data.userId;
     if (userId) {
       global.allOnlineUsers.delete(userId);
