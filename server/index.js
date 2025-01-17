@@ -59,11 +59,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("offline", () => {
-    console.log("offline event called");
+    console.log(socket.data.userId);
     const userId = socket.data.userId;
     if (userId) {
       global.allOnlineUsers.delete(userId);
-      console.log(`User ${userId} disconnected`);
+      console.log(`User ${userId} explicitly disconnected`);
     }
+    console.log("allOnlineUsers after offline:", global.allOnlineUsers); // Debug log
   });
 });
