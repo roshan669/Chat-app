@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
       });
     }
   });
-  socket.on("disconnect", () => {
+  socket.on("offline", () => {
     const userId = socket.data.userId;
     if (userId) {
       global.allOnlineUsers.delete(userId);
