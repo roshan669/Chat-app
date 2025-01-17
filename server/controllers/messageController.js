@@ -86,3 +86,36 @@ module.exports.getNewMessage = async (req, res, next) => {
     res.status(500).json({ error: "Failed to fetch messages" });
   }
 };
+
+const Messages = require("../models/messageModel");
+
+module.exports.deleteMessages = async (req, res, next) => {
+  try {
+    const { from, to } = req.body;
+
+    // Convert from and to to ObjectIds if they are strings
+    const fromObjectId = mongoose.Types.ObjectId.isValid(from)
+      ? new mongoose.Types.ObjectId(from)
+      : null;
+    const toObjectId = mongoose.Types.ObjectId.isValid(to)
+      ? new mongoose.Types.ObjectId(to)
+      : null;
+    if (!fromObjectId || !toObjectId) {
+      return res.status(400).json({ message: "Invalid user IDs" });
+    }
+
+    const data = await Messages.deleteMany({
+      $or: [
+        { sender: fromObjectId, users: { $all: [fromObjectId, toObjectId] } },
+      ],
+    });
+
+    if (data.deletedCount > 0) {
+      res.status(200).json({ message: "Messages deleted successfully." });
+    } else {
+      res.status(404).json({ message: "No messages found to delete." }); // Or 404
+    }
+  } catch (error) {
+    next(error);
+  }
+};
