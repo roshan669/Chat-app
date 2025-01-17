@@ -58,9 +58,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("offline", () => {
-    console.log(socket.data.userId);
-    const userId = socket.data.userId;
+  socket.on("offline", (data) => {
+    console.log(data.CU);
+    const userId = data.CU;
     if (userId) {
       global.allOnlineUsers.delete(userId);
       console.log(`User ${userId} explicitly disconnected`);
