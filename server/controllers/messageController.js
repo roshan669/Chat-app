@@ -87,8 +87,6 @@ module.exports.getNewMessage = async (req, res, next) => {
   }
 };
 
-const Messages = require("../models/messageModel");
-
 module.exports.deleteMessages = async (req, res, next) => {
   try {
     const { from, to } = req.body;
