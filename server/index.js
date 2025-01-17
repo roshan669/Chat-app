@@ -47,43 +47,41 @@ global.allOnlineUsers = new Map();
 let timeoutId;
 
 io.on("connection", (socket) => {
-    clearTimeout(timeoutId);
+  clearTimeout(timeoutId);
   socket.on("add-user", (userId) => {
     global.allOnlineUsers.set(userId, socket.id);
     console.log(`User ${userId} connected`);
     timeoutId = setTimeout(() => {
-          const userId = socket.data.userId;
-          if (userId) {
-              global.allOnlineUsers.delete(userId);
-                 }
-          socket.disconnect(true)
-          console.log(`User ${userId} disconnected due to inactivity`);
-        }, 1 * 60 * 1000);
+      const userId = socket.data.userId;
+      if (userId) {
+        global.allOnlineUsers.delete(userId);
       }
-    });
+      socket.disconnect(true);
+      console.log(`User ${userId} disconnected due to inactivity`);
+    }, 1 * 60 * 1000);
   });
 
- socket.on("send-msg", (data) => {
-  clearTimeout(timeoutId);
+  socket.on("send-msg", (data) => {
+    clearTimeout(timeoutId);
 
-  const sendUserSocket = global.allOnlineUsers.get(data.to);
-  if (sendUserSocket) {
-    // Emit the message only if the recipient's socket is available
-    socket.to(sendUserSocket).emit("msg-recive", data.msg, (err) => {
-      if (!err) {
-        // Reset the timeout only if the message was sent successfully (no error)
-        timeoutId = setTimeout(() => {
-          const userId = socket.data.userId;
-          if (userId) {
+    const sendUserSocket = global.allOnlineUsers.get(data.to);
+    if (sendUserSocket) {
+      // Emit the message only if the recipient's socket is available
+      socket.to(sendUserSocket).emit("msg-recive", data.msg, (err) => {
+        if (!err) {
+          // Reset the timeout only if the message was sent successfully (no error)
+          timeoutId = setTimeout(() => {
+            const userId = socket.data.userId;
+            if (userId) {
               global.allOnlineUsers.delete(userId);
-                 }
-          socket.disconnect(true)
-          console.log(`User ${userId} disconnected due to inactivity`);
-        }, 1 * 60 * 1000);
-      }
-    });
-  }
-});
+            }
+            socket.disconnect(true);
+            console.log(`User ${userId} disconnected due to inactivity`);
+          }, 1 * 60 * 1000);
+        }
+      });
+    }
+  });
   socket.on("disconnect", () => {
     const userId = socket.data.userId;
     if (userId) {
