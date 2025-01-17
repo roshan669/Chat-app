@@ -55,9 +55,8 @@ io.on("connection", (socket) => {
       const userId = socket.data.userId;
       if (userId) {
         global.allOnlineUsers.delete(userId);
+        console.log(`User ${userId} disconnected due to inactivity`);
       }
-      socket.disconnect(true);
-      console.log(`User ${userId} disconnected due to inactivity`);
     }, 1 * 60 * 1000);
   });
 
@@ -74,9 +73,8 @@ io.on("connection", (socket) => {
             const userId = socket.data.userId;
             if (userId) {
               global.allOnlineUsers.delete(userId);
+              console.log(`User ${userId} disconnected due to inactivity`);
             }
-            socket.disconnect(true);
-            console.log(`User ${userId} disconnected due to inactivity`);
           }, 1 * 60 * 1000);
         }
       });
