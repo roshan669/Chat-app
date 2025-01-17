@@ -44,12 +44,23 @@ const io = socketIo(server, {
 });
 
 global.allOnlineUsers = new Map();
+let timeoutId;
 
 io.on("connection", (socket) => {
+    clearTimeout(timeoutId);
   socket.on("add-user", (userId) => {
     global.allOnlineUsers.set(userId, socket.id);
     console.log(`User ${userId} connected`);
-    console.log(allOnlineUsers);
+    timeoutId = setTimeout(() => {
+          const userId = socket.data.userId;
+          if (userId) {
+              global.allOnlineUsers.delete(userId);
+                 }
+          socket.disconnect(true)
+          console.log(`User ${userId} disconnected due to inactivity`);
+        }, 1 * 60 * 1000);
+      }
+    });
   });
 
  socket.on("send-msg", (data) => {
