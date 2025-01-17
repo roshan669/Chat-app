@@ -52,13 +52,27 @@ io.on("connection", (socket) => {
     console.log(allOnlineUsers);
   });
 
-  socket.on("send-msg", (data) => {
-    const sendUserSocket = global.allOnlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recive", data.msg);
-    }
-  });
+ socket.on("send-msg", (data) => {
+  clearTimeout(timeoutId);
 
+  const sendUserSocket = global.allOnlineUsers.get(data.to);
+  if (sendUserSocket) {
+    // Emit the message only if the recipient's socket is available
+    socket.to(sendUserSocket).emit("msg-recive", data.msg, (err) => {
+      if (!err) {
+        // Reset the timeout only if the message was sent successfully (no error)
+        timeoutId = setTimeout(() => {
+          const userId = socket.data.userId;
+          if (userId) {
+              global.allOnlineUsers.delete(userId);
+                 }
+          socket.disconnect(true)
+          console.log(`User ${userId} disconnected due to inactivity`);
+        }, 1 * 60 * 1000);
+      }
+    });
+  }
+});
   socket.on("disconnect", () => {
     const userId = socket.data.userId;
     if (userId) {
